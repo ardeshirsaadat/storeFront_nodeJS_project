@@ -11,7 +11,7 @@ export type Order = {
   status: boolean
 }
 
-export class orderInterface {
+export class OrderInterface {
   async create(o: Order): Promise<Order> {
     try {
       //@ts-ignore
