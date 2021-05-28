@@ -1,5 +1,6 @@
 import { User, UserInterface } from '../Models/userModel'
 import express from 'express'
+import authorize from '../Middleware/authorization'
 import jsonwebtoken, { Secret } from 'jsonwebtoken'
 
 const user = new UserInterface()
@@ -40,7 +41,7 @@ const createHandler = async (req: express.Request, res: express.Response) => {
       password: req.body.password
     }
     const newUser = await user.create(usrz)
-    let token = jsonwebtoken.sign({ usrz: newUser }, process.env.Token_key as Secret)
+    var token = jsonwebtoken.sign({ usrz: newUser }, process.env.Token_key as Secret)
     res.json(token)
   } catch (error) {
     res.status(404)
@@ -50,7 +51,9 @@ const createHandler = async (req: express.Request, res: express.Response) => {
 
 
 const userModelHandler = async (app: express.Application) => {
-  app.get('/users', indexHandler)
-  app.get('/users/:id', showHandler)
+  app.get('/users', authorize, indexHandler)
+  app.get('/users/:id', authorize, showHandler)
   app.post('/users', createHandler)
 }
+
+export default userModelHandler

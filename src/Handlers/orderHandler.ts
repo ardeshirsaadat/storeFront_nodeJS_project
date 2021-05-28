@@ -1,5 +1,6 @@
 import { Order, OrderInterface } from '../Models/orderModel'
 import express from 'express'
+import authorize from '../Middleware/authorization'
 const order = new OrderInterface()
 
 const showHandler = async (req: express.Request, res: express.Response) => {
@@ -32,6 +33,8 @@ const createHandler = async (req: express.Request, res: express.Response) => {
 
 
 const orderModelHandler = async (app: express.Application) => {
-  app.get('/users/:id/orders', showHandler)
-  app.post('/orders', createHandler)
+  app.get('/users/:id/orders', authorize, showHandler)
+  app.post('/orders', authorize, createHandler)
 }
+
+export default orderModelHandler

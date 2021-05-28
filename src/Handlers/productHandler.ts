@@ -1,4 +1,5 @@
 import { Product, ProductInterface } from '../Models/productModel'
+import authorize from '../Middleware/authorization'
 import express from 'express'
 const product = new ProductInterface()
 const indexHandler = async (req: express.Request, res: express.Response) => {
@@ -42,5 +43,7 @@ const createHandler = async (req: express.Request, res: express.Response) => {
 const productModelHandler = async (app: express.Application) => {
   app.get('/products', indexHandler)
   app.get('/products/:id', showHandler)
-  app.post('/products', createHandler)
+  app.post('/products', authorize, createHandler)
 }
+
+export default productModelHandler

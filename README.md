@@ -1,54 +1,142 @@
-# Storefront Backend Project
+# API Requirements
 
-## Getting Started
+The company stakeholders want to create an online storefront to showcase their great product ideas. Users need to be able to browse an index of all products, see the specifics of a single product, and add products to an order that they can view in a cart page. You have been tasked with building the API that will support this application, and your coworker is building the frontend.
 
-This repo contains a basic Node and Express app to get you started in constructing an API. To get started, clone this repo and run `yarn` in your terminal at the project root.
+These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application.
 
-## Required Technologies
-Your application must make use of the following libraries:
-- Postgres for the database
-- Node/Express for the application logic
-- dotenv from npm for managing environment variables
-- db-migrate from npm for migrations
-- jsonwebtoken from npm for working with JWTs
-- jasmine from npm for testing
+## API Endpoints
 
-## Steps to Completion
+#### Products
 
-### 1. Plan to Meet Requirements
+- Index: '/products' [GET]
+- Show: '/products/:id' [GET]
+- Create [token required]: '/products' : [SHOW]
+- [OPTIONAL] Top 5 most popular products
+- [OPTIONAL] Products by category (args: product category)
 
-In this repo there is a `REQUIREMENTS.md` document which outlines what this API needs to supply for the frontend, as well as the agreed upon data shapes to be passed between front and backend. This is much like a document you might come across in real life when building or extending an API. 
+#### Users
 
-Your first task is to read the requirements and update the document with the following:
-- Determine the RESTful route for each endpoint listed. Add the RESTful route and HTTP verb to the document so that the frontend developer can begin to build their fetch requests.    
-**Example**: A SHOW route: 'blogs/:id' [GET] 
+- Index [token required]: '/users' : [GET]
+- Show [token required]: '/users/:id': [GET]
+- Create: '/users': [POST]
 
-- Design the Postgres database tables based off the data shape requirements. Add to the requirements document the database tables and columns being sure to mark foreign keys.   
-**Example**: You can format this however you like but these types of information should be provided
-Table: Books (id:varchar, title:varchar, author:varchar, published_year:varchar, publisher_id:string[foreign key to publishers table], pages:number)
+#### Orders
 
-**NOTE** It is important to remember that there might not be a one to one ratio between data shapes and database tables. Data shapes only outline the structure of objects being passed between frontend and API, the database may need multiple tables to store a single shape. 
+- Create [token required]:'/orders': [POST]
+- Current Order by user (args: user id)[token required]: '/users/:id/orders' [GET]
+- [OPTIONAL] Completed Orders by user (args: user id)[token required]
 
-### 2.  DB Creation and Migrations
+## Data Shapes
 
-Now that you have the structure of the databse outlined, it is time to create the database and migrations. Add the npm packages dotenv and db-migrate that we used in the course and setup your Postgres database. If you get stuck, you can always revisit the database lesson for a reminder. 
+#### Product
 
-You must also ensure that any sensitive information is hashed with bcrypt. If any passwords are found in plain text in your application it will not pass.
+- id
+- name
+- price
+- [OPTIONAL] category
+- Table: Products (id:serial[primary key], name:varchar, price:int, category:varchar)
 
-### 3. Models
+#### User
 
-Create the models for each database table. The methods in each model should map to the endpoints in `REQUIREMENTS.md`. Remember that these models should all have test suites and mocks.
+- id
+- firstName
+- lastName
+- password
+- Table: Users (id: serial [primary key],fistName:varchar,lastName:varchar,password:varchar)
 
-### 4. Express Handlers
+#### Orders
 
-Set up the Express handlers to route incoming requests to the correct model method. Make sure that the endpoints you create match up with the enpoints listed in `REQUIREMENTS.md`. Endpoints must have tests and be CORS enabled. 
+- id
+- id of each product in the order
+- quantity of each product in the order
+- user_id
+- status of order (active or complete)
+- Table: Orders (id: serical [primary key],product_id: int [foreign key to Products table],quantity:int,user_id:int [foreign key to Users table],status:boolean)
 
-### 5. JWTs
+## Setup
 
-Add JWT functionality as shown in the course. Make sure that JWTs are required for the routes listed in `REQUIUREMENTS.md`.
+### PostgreSQL
 
-### 6. QA and `README.md`
+Make sure that you habe PostgreSQL installed, otherwise install [PostgreSQL](https://www.postgresql.org) from their homepage.
 
-Before submitting, make sure that your project is complete with a `README.md`. Your `README.md` must include instructions for setting up and running your project including how you setup, run, and connect to your database. 
+```
+postgres --version
+```
 
-Before submitting your project, spin it up and test each endpoint. If each one responds with data that matches the data shapes from the `REQUIREMENTS.md`, it is ready for submission!
+Start Postgres with
+
+```
+net start postgresql <your version>
+```
+
+and enter the Postgres terminal with
+
+```
+psql postgres -U <your username usually postgres>
+```
+
+Create the database
+
+```
+CREATE DATABASE <db_name>;
+```
+
+Connect to the database
+
+```
+\c <db_name>
+```
+
+Display the tables (no relations should be found)
+
+```
+\dt
+```
+
+The project will work with your database if you name your environment variables in the .env file.
+
+```
+Database: <i.e storefront>
+Username: <i.e postgres>
+Port: <i.e 5678>
+PostgresHost:<i.e 127.0.0.1>
+ENV= <i.e test>
+Database_test=<i.e storefront_test>
+
+BYCRYPT_PASSWORD=<i.e 'BILBAL'>
+saltRounds=<i.e 10>
+
+Token_key=<i.e "sealed">
+```
+
+Install the node modules
+
+```
+npm install
+```
+
+Load the database schema with
+
+```
+db-migrate up
+```
+
+Run the test suite with
+
+```
+npm run test
+```
+
+and afterwards reset the test-database with
+
+```
+npm run drop-database
+```
+
+you can start this API with nodemon
+
+```
+npm run start
+```
+
+The server runs on localhost:3000 on default.
