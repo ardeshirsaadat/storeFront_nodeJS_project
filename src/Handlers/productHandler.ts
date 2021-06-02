@@ -32,10 +32,10 @@ const createHandler = async (req: express.Request, res: express.Response) => {
       category: req.body.category
     }
     const result = await product.create(prod)
-    res.json(result)
+    res.send(result)
   } catch (error) {
-    res.status(404)
-    res.json(error)
+    res.status(400)
+    res.send(error)
   }
 }
 

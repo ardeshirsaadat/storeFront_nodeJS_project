@@ -18,8 +18,6 @@ const createHandler = async (req: express.Request, res: express.Response) => {
   try {
     const ord: Order = {
       id: req.body.id,
-      product_id: req.body.product_id,
-      quantity: req.body.quantity,
       user_id: req.body.user_id,
       status: req.body.status
     }
@@ -31,10 +29,23 @@ const createHandler = async (req: express.Request, res: express.Response) => {
   }
 }
 
+const addproduct = async (req: express.Request, res: express.Response) => {
+  try {
+    const productId = req.body.product_id
+    const orderId = req.body.order_id
+    const quantity = req.body.quantity
+    const result = await order.addProduct(quantity, orderId, productId)
+    res.json(result)
+  } catch (error) {
+    res.status(404)
+    res.json(error)
+  }
+}
 
 const orderModelHandler = async (app: express.Application) => {
   app.get('/users/:id/orders', authorize, showHandler)
   app.post('/orders', authorize, createHandler)
+  app.post('/orders/:id/products', addproduct)
 }
 
 export default orderModelHandler

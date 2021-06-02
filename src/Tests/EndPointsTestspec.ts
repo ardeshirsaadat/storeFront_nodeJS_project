@@ -18,10 +18,9 @@ describe("testing /products /users /orders endpoints", () => {
 
   const myorder: Order = {
     id: 1,
-    product_id: 1,
-    quantity: 50,
     user_id: 1,
-    status: true
+    status: 'active'
+
   }
 
   let token: string;
@@ -35,6 +34,7 @@ describe("testing /products /users /orders endpoints", () => {
       });
 
     token = response.body.token;
+    console.log(token)
   });
 
   it("should insert iphone into database", async () => {
@@ -61,11 +61,12 @@ describe("testing /products /users /orders endpoints", () => {
       .set("Authorization", "bearer " + token)
       .expect(200);
 
-    expect(response.body.status).toEqual(true);
+    expect(response.body.status).toEqual('active');
   });
 
   it("should get myorder from orders", async () => {
     const response = await request.get("/users/1/orders")
+      .set("Authorization", "bearer " + token)
       .expect(200);
   });
 });

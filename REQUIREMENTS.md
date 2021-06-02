@@ -23,6 +23,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 #### Orders
 
 - Create [token required]:'/orders': [POST]
+- addProduct [token required]:'/orders/:id/products': [POST]
 - Current Order by user (args: user id)[token required]: '/users/:id/orders' [GET]
 - [OPTIONAL] Completed Orders by user (args: user id)[token required]
 
@@ -47,8 +48,14 @@ These are the notes from a meeting with the frontend developer that describe wha
 #### Orders
 
 - id
-- id of each product in the order
-- quantity of each product in the order
 - user_id
 - status of order (active or complete)
-- Table: Orders (id: serical [primary key],product_id: int [foreign key to Products table],quantity:int,user_id:int [foreign key to Users table],status:boolean)
+- Table: Orders (id: serical [primary key],user_id:int [foreign key to Users table],status:boolean)
+
+#### order-product
+
+- id
+- order_id
+- product_id
+- quantity
+- Table: order-product (id: serical [primary key],quantity,order_id [foreign key to orders table],product_id[foreign key to porduct table])

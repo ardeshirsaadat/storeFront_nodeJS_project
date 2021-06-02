@@ -8,9 +8,9 @@
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess 'node ./dist/server.js'",
     "test": "ENV=test db-migrate --env test up && jasmine-ts && npm run drop-database",
     "tsc": "tsc",
-    "db-migrate": "db-migrate create orders --sql-file",
+    "db-migrate": "db-migrate create order_product --sql-file",
     "up": "db-migrate up",
-    "down": "db-migrate down",
+    "down": "db-migrate reset",
     "jasmine": "jasmine init",
     "drop-database": "db-migrate reset --env test"
   },

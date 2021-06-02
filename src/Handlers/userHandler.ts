@@ -42,7 +42,7 @@ const createHandler = async (req: express.Request, res: express.Response) => {
     }
     const newUser = await user.create(usrz)
     var token = jsonwebtoken.sign({ usrz: newUser }, process.env.Token_key as Secret)
-    res.json(token)
+    res.send({ token })
   } catch (error) {
     res.status(404)
     res.json(error)
