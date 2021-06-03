@@ -7,17 +7,15 @@ const user = new UserInterface()
 const indexHandler = async (req: express.Request, res: express.Response) => {
   try {
     const result = await user.index()
-    res.json(result)
+    res.send(result)
   } catch (error) {
-    res.status(404)
-    res.json(error)
+    res.status(404).send(error)
   }
 }
 
 const showHandler = async (req: express.Request, res: express.Response) => {
   try {
     const usrz: User = {
-      id: req.body.id,
       firstName: req.body.firstname,
       lastName: req.body.lastname,
       password: req.body.password
@@ -25,7 +23,7 @@ const showHandler = async (req: express.Request, res: express.Response) => {
     // const exisitingUser = await user.show(id)
     let existingUser = user.authenticate(usrz.firstName, usrz.password)
     let token = jsonwebtoken.sign({ usrz: existingUser }, process.env.Token_key as Secret)
-    res.json(token)
+    res.send({ token })
   } catch (error) {
     res.status(404)
     res.json(error)
@@ -35,13 +33,12 @@ const showHandler = async (req: express.Request, res: express.Response) => {
 const createHandler = async (req: express.Request, res: express.Response) => {
   try {
     const usrz: User = {
-      id: req.body.id,
       firstName: req.body.firstname,
       lastName: req.body.lastname,
       password: req.body.password
     }
     const newUser = await user.create(usrz)
-    var token = jsonwebtoken.sign({ usrz: newUser }, process.env.Token_key as Secret)
+    let token = jsonwebtoken.sign({ usrz: newUser }, process.env.Token_key as Secret)
     res.send({ token })
   } catch (error) {
     res.status(404)
@@ -51,8 +48,8 @@ const createHandler = async (req: express.Request, res: express.Response) => {
 
 
 const userModelHandler = async (app: express.Application) => {
-  app.get('/users', authorize, indexHandler)
-  app.get('/users/:id', authorize, showHandler)
+  app.get('/users', indexHandler)
+  app.get('/users/:id', showHandler)
   app.post('/users', createHandler)
 }
 

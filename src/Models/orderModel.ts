@@ -12,7 +12,6 @@ export type Order = {
 export class OrderInterface {
   async create(o: Order): Promise<Order> {
     try {
-      //@ts-ignore
       const connection = await Client.connect()
       const sql = 'insert into orders(status,user_id) values($1,$2) RETURNING *'
       const result = await connection.query(sql, [o.status, o.user_id])
@@ -26,7 +25,6 @@ export class OrderInterface {
 
   async show(user_id: number): Promise<Order[]> {
     try {
-      //@ts-ignore
       const connection = await Client.connect()
       const sql = 'select * from orders where user_id=($1)'
       const result = await connection.query(sql, [user_id])
@@ -41,7 +39,6 @@ export class OrderInterface {
     // get order to see if it is open
     try {
       const ordersql = 'SELECT * FROM orders WHERE id=($1)'
-      //@ts-ignore
       const conn = await Client.connect()
 
       const result = await conn.query(ordersql, [orderId])
@@ -58,8 +55,7 @@ export class OrderInterface {
     }
 
     try {
-      const sql = 'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *'
-      //@ts-ignore
+      const sql = 'INSERT INTO product_order (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *'
       const conn = await Client.connect()
 
       const result = await conn

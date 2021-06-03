@@ -26,7 +26,6 @@ const showHandler = async (req: express.Request, res: express.Response) => {
 const createHandler = async (req: express.Request, res: express.Response) => {
   try {
     const prod: Product = {
-      id: req.body.id,
       name: req.body.name,
       price: req.body.price,
       category: req.body.category

@@ -6,8 +6,9 @@ import orderModelHandler from './Handlers/orderHandler';
 import userModelHandler from './Handlers/userHandler';
 import { server } from 'typescript';
 import cors from 'cors'
+
 const app: express.Application = express()
-const address: string = "0.0.0.0:3000"
+const address = "0.0.0.0:3000"
 
 app.use(express.json()) // for parsing application/json
 // app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded

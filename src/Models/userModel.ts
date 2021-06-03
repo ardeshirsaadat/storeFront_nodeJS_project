@@ -7,7 +7,6 @@ const { saltRounds, BYCRYPT_PASSWORD } = process.env
 
 console.log(BYCRYPT_PASSWORD)
 export type User = {
-  id: number;
   firstName: string;
   lastName: string;
   password: string;
@@ -16,7 +15,6 @@ export type User = {
 export class UserInterface {
   async index(): Promise<User[]> {
     try {
-      //@ts-ignore
       const connection = await Client.connect()
       const sql = 'select * from users'
       const result = await connection.query(sql)
@@ -30,7 +28,6 @@ export class UserInterface {
 
   async show(id: number): Promise<User> {
     try {
-      //@ts-ignore
       const connection = await Client.connect()
       const sql = 'select * from users where id=($1)'
       const result = await connection.query(sql, [id])
@@ -44,7 +41,6 @@ export class UserInterface {
 
   async create(u: User): Promise<boolean> {
     try {
-      //@ts-ignore
       const connection = await Client.connect()
       const sql = 'insert into users(firstName,lastName,password) values($1,$2,$3) RETURNING *'
       const hashed_password = bycrypt.hashSync(u.password + BYCRYPT_PASSWORD, parseInt(saltRounds as string))
@@ -58,11 +54,9 @@ export class UserInterface {
   }
 
   async authenticate(userName: string, password: string): Promise<User | null> {
-
-    //@ts-ignore
     const connection = await Client.connect()
-    const sql = 'select password from users where firstName=($1)'
-    const result = await connection.query(sql, userName)
+    const sql = 'select password from users where firstname=($1)'
+    const result = await connection.query(sql, [userName])
 
     if (result.rows.length) {
       const user = result.rows[0]

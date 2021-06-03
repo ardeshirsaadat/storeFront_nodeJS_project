@@ -10,7 +10,6 @@ const request = supertest(app);
 describe("testing /products /users /orders endpoints", () => {
 
   const iphone: Product = {
-    id: 1,
     name: "iphone",
     price: 1200,
     category: "electronics"
@@ -55,6 +54,14 @@ describe("testing /products /users /orders endpoints", () => {
     expect(response.body.name).toEqual("iphone");
   });
 
+  it("should get all products", async () => {
+    const response = await request.get("/products")
+      .expect(200);
+
+    expect(response.body.length).toEqual(1);
+    expect(response.body[0].name).toEqual("iphone");
+  });
+
   it("should insert order into database", async () => {
     const response = await request.post("/orders")
       .send(myorder)
@@ -68,5 +75,30 @@ describe("testing /products /users /orders endpoints", () => {
     const response = await request.get("/users/1/orders")
       .set("Authorization", "bearer " + token)
       .expect(200);
+  });
+
+  it("it should get a user", async () => {
+    const response = await request.get("/users/1")
+      .send({
+        firstname: "ardeshir",
+        lastname: "saadat",
+        password: "secret"
+      })
+      .expect(200);
+  });
+
+  it("should get all users", async () => {
+    const response = await request.get("/users")
+      .expect(200);
+    console.log(response.body)
+    expect(response.body[0].firstname).toEqual('ardeshir');
+  });
+
+  it("should add product to an order", async () => {
+    const response = await request.post("/orders/1/products")
+      .send({ product_id: 1, order_id: 1, quantity: 20 })
+      .expect(200);
+
+    expect(response.body.quantity).toEqual(20);
   });
 });

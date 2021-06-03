@@ -11,32 +11,8 @@ describe("order Model", () => {
     expect(orderObject.show).toBeDefined();
   });
 
-  // it('create method should add a order', async () => {
-  //   const result = await orderObject.create({
-  //     id: 1,
-  //     product_id: 11,
-  //     quantity: 5,
-  //     user_id: 1,
-  //     status: true
-  //   });
-  //   expect(result).toEqual({
-  //     id: 1,
-  //     product_id: 11,
-  //     quantity: 5,
-  //     user_id: 1,
-  //     status: true
-  //   });
-  // });
-
-  // it('show method should add a order', async () => {
-  //   const result = await orderObject.show(1);
-  //   expect(result).toEqual([{
-  //     id: 1,
-  //     product_id: 11,
-  //     quantity: 5,
-  //     user_id: 1,
-  //     status: true
-  //   }]);
-  // });
+  it('should add a product', () => {
+    expect(orderObject.addProduct).toBeDefined();
+  });
 
 });

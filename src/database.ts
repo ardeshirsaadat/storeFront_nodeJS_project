@@ -10,8 +10,11 @@ const {
   Database_test,
   ENV
 } = process.env
-let Client
+
+let Client: Pool;
+
 console.log(ENV)
+
 if (ENV === 'dev') {
   Client = new Pool({
     host: PostgresHost,
@@ -29,4 +32,5 @@ if (ENV === 'test') {
     port: Number(Port)
   })
 }
-export default Client
+
+export default Client;
