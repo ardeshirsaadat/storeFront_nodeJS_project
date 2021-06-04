@@ -11,7 +11,7 @@ const {
   ENV
 } = process.env
 
-let Client: Pool;
+let Client: Pool = new Pool();
 
 console.log(ENV)
 

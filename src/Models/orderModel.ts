@@ -35,7 +35,7 @@ export class OrderInterface {
       throw new Error(`CANT GET THIS USER'S ORDERS : ERROR ${error}`)
     }
   }
-  async addProduct(quantity: number, orderId: string, productId: string): Promise<Order> {
+  async addProduct(quantity: number, orderId: string, productId: string): Promise<{ id: number, quantity: number, order_id: string, product_id: string }> {
     // get order to see if it is open
     try {
       const ordersql = 'SELECT * FROM orders WHERE id=($1)'
